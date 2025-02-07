@@ -9,11 +9,9 @@ const navLinks = document.querySelector('.nav-links');
 menuBtn.addEventListener('click', () => {
     menuBtn.classList.toggle('active');
     navLinks.classList.toggle('active');
-    // Prevent scrolling when menu is open
     document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
 });
 
-// Close menu when clicking outside
 document.addEventListener('click', (e) => {
     if (!menuBtn.contains(e.target) && !navLinks.contains(e.target) && navLinks.classList.contains('active')) {
         menuBtn.classList.remove('active');
@@ -22,7 +20,6 @@ document.addEventListener('click', (e) => {
     }
 });
 
-// Close menu when clicking a link
 document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('click', () => {
         menuBtn.classList.remove('active');
@@ -50,7 +47,7 @@ const prevBtn = document.querySelector('.team-carousel-btn.prev');
 const dotsContainer = document.querySelector('.team-carousel-dots');
 
 let currentIndex = 0;
-const cardWidth = 300 + 32; // Card width + gap
+const cardWidth = 300 + 32; 
 const visibleCards = Math.floor(window.innerWidth >= 1200 ? 3 : window.innerWidth >= 768 ? 2 : 1);
 const maxIndex = Math.max(0, cards.length - visibleCards);
 
@@ -120,7 +117,6 @@ if (Math.abs(diff) > swipeThreshold) {
 }
 }
 
-// Handle window resize
 window.addEventListener('resize', () => {
 const newVisibleCards = Math.floor(window.innerWidth >= 1200 ? 3 : window.innerWidth >= 768 ? 2 : 1);
 const newMaxIndex = Math.max(0, cards.length - newVisibleCards);
@@ -130,76 +126,56 @@ if (currentIndex > newMaxIndex) {
 });
 });
 
-// Gallery scroll functions
 function scrollLeft() {
-const track = document.querySelector('.gallery-carousel-track');
-track.scrollBy({
-left: -300,
-behavior: 'smooth'
-});
+    const track = document.querySelector('.gallery-carousel-track');
+    const scrollAmount = track.clientWidth * 0.8;
+    track.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+    });
 }
 
 function scrollRight() {
-const track = document.querySelector('.gallery-carousel-track');
-track.scrollBy({
-left: 300,
-behavior: 'smooth'
-});
+    const track = document.querySelector('.gallery-carousel-track');
+    const scrollAmount = track.clientWidth * 0.8;
+    track.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+    });
 }
 
-let touchStartX = 0;
-let touchEndX = 0;
-
-track.addEventListener('touchstart', e => {
-touchStartX = e.changedTouches[0].screenX;
-});
-
-track.addEventListener('touchend', e => {
-touchEndX = e.changedTouches[0].screenX;
-handleSwipe();
-});
-
-function handleSwipe() {
-const swipeThreshold = 50;
-const diff = touchStartX - touchEndX;
-
-if (Math.abs(diff) > swipeThreshold) {
-if (diff > 0 && currentIndex < cards.length - 1) {
-    goToSlide(currentIndex + 1);
-} else if (diff < 0 && currentIndex > 0) {
-    goToSlide(currentIndex - 1);
-}
-}
-}
-
-document.addEventListener('keydown', (e) => {
-if (e.key === 'ArrowRight' && currentIndex < cards.length - 1) {
-goToSlide(currentIndex + 1);
-} else if (e.key === 'ArrowLeft' && currentIndex > 0) {
-goToSlide(currentIndex - 1);
-}
-});
 function handleSubmit(event) {
     event.preventDefault();
+    
+    const submitBtn = event.target.querySelector('.submit-btn');
+    const originalBtnText = submitBtn.textContent;
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
 
-    // Create email body
-    const emailBody = `
-        Name: ${data.name}
-        Email: ${data.email}
-        Organization: ${data.organisation}
-        Subject: ${data.subject}
-        Message: ${data.message}
-    `;
-
-    // Create mailto link
-    const mailtoLink = `mailto:parmarshashank6@gmail.com?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(emailBody)}`;
-
-    // Open default email client
-    window.location.href = mailtoLink;
-
-    // Show success message
-    alert("Thank you for your message! Your default email client will open to send the message.");
-    event.target.reset();
+    emailjs.send(
+        'service_5cu8hta', 
+        'template_goc398r', 
+        {
+            from_name: data.name,
+            from_email: data.email,
+            organisation: data.organisation,
+            subject: data.subject,
+            message: data.message,
+        }
+    )
+    .then(() => {
+        alert('Thank you for your message! We will get back to you soon.');
+        event.target.reset();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+        alert('Sorry, there was an error sending your message. Please try again later.');
+    })
+    .finally(() => {
+        submitBtn.textContent = originalBtnText;
+        submitBtn.disabled = false;
+    });
 }

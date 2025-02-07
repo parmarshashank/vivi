@@ -488,25 +488,29 @@ html {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background: rgba(100, 255, 218, 0.1);
-    border: none;
+    background: rgba(100, 255, 218, 0.15);
+    border: 2px solid var(--primary-color);
     color: var(--primary-color);
-    font-size: 1.5rem;
-    padding: 1rem;
-    cursor: pointer;
+    width: 40px;
+    height: 40px;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
     transition: all 0.3s ease;
-    z-index: 8;
-    opacity: 0.8;
+    z-index: 10;
+    backdrop-filter: blur(5px);
 }
 
 .team-carousel-btn:hover {
-    background: rgba(100, 255, 218, 0.2);
-    opacity: 1;
+    background: var(--primary-color);
+    color: #000;
+    transform: translateY(-50%) scale(1.1);
 }
 
-.team-carousel-btn.prev { left: 0; }
-.team-carousel-btn.next { right: 0; }
+.team-carousel-btn.prev { left: 10px; }
+.team-carousel-btn.next { right: 10px; }
 
 .team-carousel-dots {
     display: flex;
@@ -642,6 +646,12 @@ html {
     .contact-info p {
         justify-content: center;
     }
+
+    .scroll-button, .team-carousel-btn {
+        width: 35px;
+        height: 35px;
+        font-size: 0.9rem;
+    }
 }
 
 .gallery-section {
@@ -723,22 +733,29 @@ html {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: rgba(0, 0, 0, 0.5);
-    border: none;
-    color: #ffffff;
-    font-size: 2rem;
+    background: rgba(100, 255, 218, 0.15);
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    transition: all 0.3s ease;
     z-index: 10;
-    padding: 0.5rem;
+    backdrop-filter: blur(5px);
 }
 
-.scroll-button.left {
-    left: 0;
+.scroll-button:hover {
+    background: var(--primary-color);
+    color: #000;
+    transform: translateY(-50%) scale(1.1);
 }
 
-.scroll-button.right {
-    right: 0;
-}
+.scroll-button.left { left: 10px; }
+.scroll-button.right { right: 10px; }
 
 .scroll-button:hover {
     background-color: rgba(0, 0, 0, 0.7);
